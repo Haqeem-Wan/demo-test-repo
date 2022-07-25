@@ -3,6 +3,8 @@ import math
 import time
 from fileinput import close
 
+from numpy import array
+
 peopleFile = "people.csv"
 ppvFile = "ppv.csv"
 
@@ -17,64 +19,90 @@ def coordinate_distance_formula(lat_1, lon_1, lat_2, lon_2):
 
     return math.sqrt(pow(lat_distance, 2) + pow(lon_distance, 2)) * 60
 
-with open(peopleFile, 'r') as readFile:
-    csvreader = csv.reader(readFile)
+def read_files() :
+    with open(peopleFile, 'r') as readFile:
+        csvreader = csv.reader(readFile)
 
-    next(csvreader)
+        next(csvreader)
 
-    for row in csvreader:
-        people_info_list.append(row)
+        for row in csvreader:
+            people_info_list.append(row)
 
-    print("Total no. of rows of people : %d"%(csvreader.line_num))
+        print("Total no. of rows of people : %d"%(csvreader.line_num))
 
-with open(ppvFile, 'r') as readFile:
-    csvreader = csv.reader(readFile)
+    with open(ppvFile, 'r') as readFile:
+        csvreader = csv.reader(readFile)
 
-    next(csvreader)
+        next(csvreader)
 
-    for row in csvreader:
-        ppv_info_list.append(row)
+        for row in csvreader:
+            ppv_info_list.append(row)
 
-    print("Total no. of rows of ppv : %d"%(csvreader.line_num))
-
-
-
-# Start of Method 1: (Slowest Method)
-
-start_time = time.time()
-
-for people_row in people_info_list:
-    for ppv_row in ppv_info_list:
-        distance_test = coordinate_distance_formula(people_row[1], people_row[2], ppv_row[1], ppv_row[2])
-        distance_compare_list.append(distance_test)
-    
-    closest_distance = min(distance_compare_list)
-
-    closest_ppv = ppv_info_list[distance_compare_list.index(closest_distance)][0]
-    
-    paired_list.append([people_row[0], closest_ppv, closest_distance])
-    distance_compare_list.clear()
-
-end_time = time.time()
-
-for row in paired_list:
-    print(row)
-
-print("\nExecution Time : ", (end_time - start_time))
-
-# End of Method 1
+        print("Total no. of rows of ppv : %d"%(csvreader.line_num))
 
 
 
-# Start of Method 2:
+# --- Start of Method 1: (Slowest Method) ---
 
-# End of Method 2
+def method_one() :
+    start_time = time.time()
+
+    for people_row in people_info_list:
+        for ppv_row in ppv_info_list:
+            distance_test = coordinate_distance_formula(people_row[1], people_row[2], ppv_row[1], ppv_row[2])
+            distance_compare_list.append(distance_test)
+        
+        closest_distance = min(distance_compare_list)
+
+        closest_ppv = ppv_info_list[distance_compare_list.index(closest_distance)][0]
+        
+        paired_list.append([people_row[0], closest_ppv, closest_distance])
+        distance_compare_list.clear()
+
+    end_time = time.time()
+
+    print("\nExecution Time (Method 1) : ", (end_time - start_time))
+
+# --- End of Method 1 ---
 
 
 
-# Start of Method 3:
+# --- Start of Method 2:---
 
-# End of Method 3
+def method_two() :
+    start_time = time.time()
+
+    people_numpy_array = array(people_info_list)
+    ppv_numpy_array = array(ppv_info_list)
+
+    end_time = time.time()
+
+    print("\nExecution Time (Method 2) : ", (end_time - start_time))
+
+# --- End of Method 2 ---
+
+
+
+# --- Start of Method 3: ---
+
+def method_three():
+    start_time = time.time()
+
+
+
+    end_time = time.time()
+
+    print("\nExecution Time (Method 3) : ", (end_time - start_time))
+
+# --- End of Method 3 ---
+
+# --- Execution Code ---
+
+read_files()
+method_one()
+method_two()
+# method_three()
+
 
 """
     print('\nFirst 5 rows are:\n')
